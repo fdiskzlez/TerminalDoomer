@@ -2,29 +2,37 @@
 
 clear
 
-echo " _____                       "
-echo "|  _  \                      "
-echo "| | | |___   ___  _ __ ___   "
-echo "| | | / _ \ / _ \| '_ \` _ \ "
-echo "| |/ / (_) | (_) | | | | | | "
-echo "|___/ \___/ \___/|_| |_| |_| "
+center_text() {
+    local term_width
+    term_width=$(tput cols)
+    local padding
+    padding=$(( (term_width - ${#1}) / 2 ))
+    printf "%*s%s\n" $padding "" "$1"
+}
 
+center_text "  _           _        _ _           "
+center_text " (_)         | |      | | |          "
+center_text "  _ _ __  ___| |_ __ _| | | ___ _ __ "
+center_text " | | '_ \/ __| __/ _\` | | |/ _ \ '__|"
+center_text " | | | | \__ \ || (_| | | |  __/ |   "
+center_text " |_|_| |_|___/\__\__,_|_|_|\___|_|   "
 echo ""
-echo "You are about to run GZDoom. Are you sure you want to run it? (y/n)"
+center_text "made by fdiskzlez"
 echo ""
 
-read -p "Your choice: " choice
+center_text "You are about to run GZDoom. Are you sure you want to run it? (y/n)"
+echo ""
+
+read -p "$(tput cup $(( $(tput lines) / 2 )) $(( ( $(tput cols) - 15 ) / 2 )) )Your choice: " choice
 
 if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
-    echo "Checking if Flatpak is installed..."
+    center_text "Checking if Flatpak is installed..."
 
-    # Check if Flatpak is installed
     if command -v flatpak > /dev/null 2>&1; then
-        echo "Flatpak is installed. Checking if GZDoom is installed..."
+        center_text "Flatpak is installed. Checking if GZDoom is installed..."
     else
-        echo "Flatpak is not installed. Installing Flatpak..."
+        center_text "Flatpak is not installed. Installing Flatpak..."
 
-        # Install Flatpak based on the Linux distribution
         if [ -f /etc/debian_version ]; then
             sudo apt-get update
             sudo apt-get install -y flatpak
@@ -33,57 +41,47 @@ if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
         elif [ -f /etc/arch-release ]; then
             sudo pacman -Syu --noconfirm flatpak
         else
-            echo "Unsupported distribution. Please install Flatpak manually."
+            center_text "Unsupported distribution. Please install Flatpak manually."
             exit 1
         fi
 
         if [[ $? -ne 0 ]]; then
-            echo "Failed to install Flatpak. Exiting..."
+            center_text "Failed to install Flatpak. Exiting..."
             exit 1
         fi
 
-        echo "Flatpak installed successfully. Proceeding..."
+        center_text "Flatpak installed successfully. Proceeding..."
     fi
 
     sleep 1
 
-    echo "Checking if GZDoom is installed..."
+    center_text "Checking if GZDoom is installed..."
 
     if flatpak info org.zdoom.GZDoom > /dev/null 2>&1; then
-        echo "GZDoom is installed. Proceeding..."
+        center_text "GZDoom is installed. Proceeding..."
         sleep 1
     else
-        echo "GZDoom is not installed. Installing via Flatpak..."
+        center_text "GZDoom is not installed. Installing via Flatpak..."
         sleep 1
 
         flatpak install -y flathub org.zdoom.GZDoom
 
         if [[ $? -ne 0 ]]; then
-            echo "Failed to install GZDoom. Exiting..."
+            center_text "Failed to install GZDoom. Exiting..."
             exit 1
         fi
         
-        echo "GZDoom installed successfully. Proceeding..."
+        center_text "GZDoom installed successfully. Proceeding..."
     fi
+    
+    clear 
 
-    sleep 1
+    center_text "Running Doom Script"
 
-    read -p "Enter the full path to the PWAD file (or leave blank to skip): " pwad
+    center_text "Executing additional script..."
+    bash doom.sh 
 
-    if [[ -n "$pwad" ]]; then
-        echo "Running GZDoom with PWAD..."
-        sleep 1
-        flatpak run org.zdoom.GZDoom -file "$pwad"
-    else
-        echo "Running GZDoom without PWAD..."
-        sleep 1
-        flatpak run org.zdoom.GZDoom
-    fi
-
-elif [[ "$choice" == "n" || "$choice" == "N" ]]; then
-    echo "Exiting..."
-    exit 0
 else
-    echo "Invalid choice. Exiting..."
-    exit 1
+    center_text "Operation canceled."
+    exit 0
 fi
