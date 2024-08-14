@@ -15,11 +15,9 @@ echo ""
 
 read -p "Your choice: " choice
 
-# Handle user input
 if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
     echo "Checking if Flatpak GZDoom is installed..."
 
-    # Check if Flatpak GZDoom is installed
     if flatpak info org.zdoom.GZDoom > /dev/null 2>&1; then
         echo "GZDoom is installed. Proceeding..."
     else
@@ -38,7 +36,6 @@ sleep 1
 
     read -p "Enter the full path to the PWAD file (or leave blank to skip): " pwad
 
-    # Check if a PWAD was provided
     if [[ -n "$pwad" ]]; then
         echo "Running GZDoom with PWAD..."
         sleep 1
@@ -56,3 +53,4 @@ else
     echo "Invalid choice. Exiting..."
     exit 1
 fi
+
