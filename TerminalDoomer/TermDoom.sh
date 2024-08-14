@@ -17,11 +17,13 @@ read -p "Your choice: " choice
 
 if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
     echo "Checking if Flatpak GZDoom is installed..."
-
+sleep 1 
     if flatpak info org.zdoom.GZDoom > /dev/null 2>&1; then
         echo "GZDoom is installed. Proceeding..."
+        sleep 1 
     else
         echo "GZDoom is not installed. Installing via Flatpak..."
+        sleep 1 
         
         flatpak install flathub org.zdoom.GZDoom
 
