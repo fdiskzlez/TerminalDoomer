@@ -10,6 +10,8 @@ center_text() {
 
     printf "%*s%s%*s\n" $padding "" "$text" $padding ""
 }
+
+# Centered text output
 center_text "          88                                             "
 center_text "          88                                             "
 center_text "          88                                             "
@@ -22,10 +24,10 @@ center_text "  \`\"8bbdP\"Y8  \`\"YbbdP\"'   \`\"YbbdP\"'  88      88      88  "
 center_text "Terminal Doom Executor made by fdiskzlez"
 echo
 
-center_text "Run Doom"
-center_text "Run Doom with PWAD"
-center_text "Run Saved Game"
-center_text "Exit"
+center_text "1. Run Doom"
+center_text "2. Run Doom with PWAD"
+center_text "3. Run Saved Game"
+center_text "4. Exit"
 echo
 
 read -p "Select an option: " option
@@ -40,7 +42,7 @@ case $option in
         read -p "Enter PWAD path: " pwad_path
         echo "Running Flatpak GZDoom with PWAD: $pwad_path..."
         sleep 1
-        flatpak run org.zdoom.GZDoom "$pwad_path"
+        flatpak run org.zdoom.GZDoom -file "$pwad_path"
         ;;
     3)
         read -p "Enter saved game path: " save_path
